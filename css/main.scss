@@ -1,0 +1,66 @@
+// imports the partials
+@import "./_resets.scss";
+@import "./_varialbes.scss";
+
+//  this is a function, function in scss are used to compute values
+@function weight($weight-name) {
+  @return map-get($font-weight, $weight-name);
+}
+
+// mixin, a mixin a code  style that will can be placed on many positions
+@mixin flexCenter($direction) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: $direction;
+}
+
+@mixin theme($light-theme: true) {
+  @if $light-theme {
+    background: lighten($primary-color, 100%);
+    color: darken($text-color, 100%);
+  }
+}
+
+@mixin mobile {
+  @media (max-width: $mobile) {
+    @content;
+  }
+}
+
+body {
+  background-color: $primary-color;
+  color: $text-color;
+}
+
+.main {
+  // include the mixin, argument can be passed to the mixins
+  @include flexCenter(row);
+  width: 80% - 10%;
+  margin: 0 auto;
+  // & will refer to the parent
+  #{&}__paragraph1 {
+    font-weight: weight(bold); // calling the function
+
+    &:hover {
+      color: tomato;
+    }
+  }
+
+  // the style of one class can be extended into another class
+  #{&}__paragraph2 {
+    @extend .main__paragraph1;
+    // after extending the features of another class we can add some more additional features
+    &:hover {
+      color: $accent-color;
+    }
+  }
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.light {
+  @include theme(true);
+}
